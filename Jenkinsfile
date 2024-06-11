@@ -67,9 +67,9 @@ pipeline {
             steps{ 
                 script {
                     sh "sh $HOME/login_ecr.sh"
-                    sh "sudo docker rm -f ${IMAGE_REPO_NAME}-${BRANCH_NAME} || true"
+                    sh "sudo docker ps -a -q| xargs docker rm -f  || true"
                     sh "sudo docker images -a -q | xargs docker rmi -f || true"
-                    sh "echo y | docker system prune"
+                    //sh "echo y | docker system prune"
                     sh "sudo docker run -itd --name ${IMAGE_REPO_NAME}-${BRANCH_NAME} -p 4200:4200 --restart always ${REPOSITORY_URI}:${BRANCH_NAME}-${env.git_commit_sha}.app_frontend"
                     sh "sudo docker run -itd --name ${IMAGE_REPO_NAME}-${BRANCH_NAME} -p 8000:8000 --restart always ${REPOSITORY_URI}:${BRANCH_NAME}-${env.git_commit_sha}.app_backend"
 
